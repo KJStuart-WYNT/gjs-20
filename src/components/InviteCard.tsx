@@ -158,9 +158,7 @@ const InviteCard = ({ firstName }: InviteCardProps) => {
             </motion.a>
 
             <motion.a
-              href="https://outlook.live.com/calendar/0/deeplink/compose?subject=GJS%2020th%20Year%20Celebration&startdt=2025-10-30T17:30:00Z&enddt=2025-10-30T20:00:00Z&body=The%20GJS%20Property%20Team%20would%20love%20you%20to%20join%20us%20for%20our%2020th%20year%20Celebration%20for%20a%20canapé%20and%20drink%20or%20two%20🥂&location=Level%2010%2C%20Shell%20House%2C%2037%20Margaret%20Street%2C%20Sydney"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="ms-outlook://calendar/action/compose?subject=GJS%2020th%20Year%20Celebration&startdt=2025-10-30T06:30:00Z&enddt=2025-10-30T09:00:00Z&body=The%20GJS%20Property%20Team%20would%20love%20you%20to%20join%20us%20for%20our%2020th%20year%20Celebration%20for%20a%20canapé%20and%20drink%20or%20two%20🥂&location=Level%2010%2C%20Shell%20House%2C%2037%20Margaret%20Street%2C%20Sydney"
               className="group relative inline-flex items-center justify-center px-4 py-2 text-sm font-light tracking-wide text-white/80 border border-white/20 rounded-full hover:border-white/40 hover:text-white transition-all duration-300"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}

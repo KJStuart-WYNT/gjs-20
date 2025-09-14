@@ -104,6 +104,46 @@ const RSVPCard = ({ firstName, lastName, email }: RSVPCardProps) => {
             <p className="text-xl text-white/70 mb-8 font-light">
               We&apos;ve received your RSVP and sent a confirmation email to you. We look forward to celebrating with you!
             </p>
+
+            {/* Calendar Links */}
+            <div className="mb-8">
+              <h3 className="text-lg font-semibold text-white mb-4 text-center">Add to Calendar</h3>
+              <div className="flex flex-wrap gap-3 justify-center">
+                <a
+                  href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=GJS%2020th%20Year%20Celebration&dates=20251030T173000Z/20251030T200000Z&details=The%20GJS%20Property%20Team%20would%20love%20you%20to%20join%20us%20for%20our%2020th%20year%20Celebration%20for%20a%20canap%C3%A9%20and%20drink%20or%20two%20%F0%9F%A5%82&location=Level%2010%2C%20Shell%20House%2C%2037%20Margaret%20Street%2C%20Sydney%20(Via%20Wynyard%20Lane)"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors duration-200 flex items-center gap-2"
+                >
+                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/>
+                  </svg>
+                  Google Calendar
+                </a>
+                <a
+                  href="https://outlook.live.com/calendar/0/deeplink/compose?subject=GJS%2020th%20Year%20Celebration&startdt=2025-10-30T17:30:00&enddt=2025-10-30T20:00:00&body=The%20GJS%20Property%20Team%20would%20love%20you%20to%20join%20us%20for%20our%2020th%20year%20Celebration%20for%20a%20canap%C3%A9%20and%20drink%20or%20two%20%F0%9F%A5%82&location=Level%2010%2C%20Shell%20House%2C%2037%20Margaret%20Street%2C%20Sydney%20(Via%20Wynyard%20Lane)"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium transition-colors duration-200 flex items-center gap-2"
+                >
+                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M7 2h10a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zm0 2v16h10V4H7zm2 2h6v2H9V6zm0 4h6v2H9v-2zm0 4h6v2H9v-2z"/>
+                  </svg>
+                  Outlook
+                </a>
+                <a
+                  href="https://calendar.apple.com/calendar/event?title=GJS%2020th%20Year%20Celebration&startDate=2025-10-30T17:30:00&endDate=2025-10-30T20:00:00&notes=The%20GJS%20Property%20Team%20would%20love%20you%20to%20join%20us%20for%20our%2020th%20year%20Celebration%20for%20a%20canap%C3%A9%20and%20drink%20or%20two%20%F0%9F%A5%82&location=Level%2010%2C%20Shell%20House%2C%2037%20Margaret%20Street%2C%20Sydney%20(Via%20Wynyard%20Lane)"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-6 py-3 bg-gray-800 hover:bg-gray-900 text-white rounded-lg font-medium transition-colors duration-200 flex items-center gap-2"
+                >
+                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/>
+                  </svg>
+                  Apple Calendar
+                </a>
+              </div>
+            </div>
             
             <motion.button
               className="btn-primary"

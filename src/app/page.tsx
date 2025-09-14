@@ -1,26 +1,10 @@
 'use client'
 
 import { motion, AnimatePresence } from 'framer-motion'
-import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 
 export default function Home() {
   const [showLogoVideo, setShowLogoVideo] = useState(true)
-  const [showInvite, setShowInvite] = useState(false)
-  const router = useRouter()
-
-  useEffect(() => {
-    // After 3 seconds, fade to invite
-    const timer = setTimeout(() => {
-      setShowInvite(true)
-      // After fade completes, redirect to 20-years page
-      setTimeout(() => {
-        router.push('/20-years')
-      }, 2000)
-    }, 3000)
-
-    return () => clearTimeout(timer)
-  }, [router])
 
   return (
     <div className="relative min-h-screen overflow-hidden">
@@ -61,14 +45,13 @@ export default function Home() {
         <div className="absolute inset-0 bg-black/40"></div>
       </div>
 
-      {/* Invite Content */}
+      {/* GJS Logo Only */}
       <AnimatePresence>
-        {showInvite && (
+        {!showLogoVideo && (
           <motion.div
             className="relative z-10 min-h-screen flex items-center justify-center px-6"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.8 }}
             transition={{ duration: 1.5, ease: 'easeOut' }}
           >
             <div className="text-center">
@@ -84,36 +67,6 @@ export default function Home() {
                   alt="GJS Property" 
                   className="h-32 md:h-40 lg:h-48 mx-auto drop-shadow-2xl filter brightness-110 contrast-110"
                 />
-              </motion.div>
-
-              {/* Invitation Text */}
-              <motion.div
-                className="mb-16"
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1, delay: 0.8, ease: 'easeOut' }}
-              >
-                <h1 className="text-2xl md:text-3xl font-light text-white/80 tracking-wide mb-8">
-                  YOU&apos;RE INVITED TO
-                </h1>
-                <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-                  20th Year Celebration
-                </h2>
-                <p className="text-lg text-white/60 font-light">
-                  Thursday, 30th October 2025
-                </p>
-              </motion.div>
-
-              {/* Loading indicator */}
-              <motion.div
-                className="flex items-center justify-center space-x-2"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 1.5 }}
-              >
-                <div className="w-2 h-2 bg-white/60 rounded-full animate-pulse"></div>
-                <div className="w-2 h-2 bg-white/60 rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
-                <div className="w-2 h-2 bg-white/60 rounded-full animate-pulse" style={{ animationDelay: '0.4s' }}></div>
               </motion.div>
             </div>
           </motion.div>

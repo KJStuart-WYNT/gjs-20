@@ -62,7 +62,7 @@ export async function POST(request: NextRequest) {
     // Calendar links (Sydney timezone)
     const googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(eventTitle)}&dates=${eventDate}T${eventStartTime}Z/${eventDate}T${eventEndTime}Z&details=${encodeURIComponent(eventDescription)}&location=${encodeURIComponent(eventLocation)}`;
     const outlookUrl = `ms-outlook://calendar/action/compose?subject=${encodeURIComponent(eventTitle)}&startdt=2025-10-30T06:30:00Z&enddt=2025-10-30T09:00:00Z&body=${encodeURIComponent(eventDescription)}&location=${encodeURIComponent(eventLocation)}`;
-    const appleUrl = `https://calendar.apple.com/calendar/event?title=${encodeURIComponent(eventTitle)}&startDate=2025-10-30T06:30:00Z&endDate=2025-10-30T09:00:00Z&notes=${encodeURIComponent(eventDescription)}&location=${encodeURIComponent(eventLocation)}`;
+    const appleUrl = `webcal://p01-calendarws.icloud.com/published/2/MTUyMzQwOTI1ODQ1MTUyM3xGSlMgMjB0aCBZZWFyIENlbGVicmF0aW9ufEdKUyBQcm9wZXJ0eSBUZWFtIHdvdWxkIGxvdmUgeW91IHRvIGpvaW4gdXMgZm9yIG91ciAyMHRoIHllYXIgQ2VsZWJyYXRpb24gZm9yIGEgY2FuYXDDqSBhbmQgZHJpbmsgb3IgdHdvIOKApnwyMDI1LTEwLTMwVDA2OjMwOjAwWi8yMDI1LTEwLTMwVDA5OjAwOjAwWnxMZXZlbCAxMCwgU2hlbGwgSG91c2UsIDM3IE1hcmdhcmV0IFN0cmVldCwgU3lkbmV5IChWaWEgV3lueWFyZCBMYW5lKQ`;
 
     // Email to RSVP person (confirmation)
     const confirmationEmail = await resend.emails.send({
@@ -73,9 +73,12 @@ export async function POST(request: NextRequest) {
         <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; background: #ffffff; color: #333333; padding: 0;">
           <!-- Header -->
           <div style="background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%); padding: 40px 30px; text-align: center;">
-            <h1 style="font-size: 28px; font-weight: 300; letter-spacing: 0.2em; color: #ffffff; margin: 0 0 10px 0;">YOU'RE INVITED TO</h1>
-            <h2 style="font-size: 42px; font-weight: 900; margin: 0 0 10px 0; color: #ffffff;">GJS</h2>
-            <h3 style="font-size: 20px; font-weight: 300; letter-spacing: 0.1em; color: #cccccc; margin: 0;">20th YEAR CELEBRATION</h3>
+            <div style="margin-bottom: 20px;">
+              <img src="https://gjsproperty.events/Primary_Dark-GJS@150pp.png" alt="GJS Property" style="height: 60px; width: auto; margin: 0 auto; display: block;">
+            </div>
+            <h1 style="font-size: 28px; font-weight: 300; letter-spacing: 0.2em; color: #ffffff; margin: 0 0 10px 0;">RSVP CONFIRMED</h1>
+            <h2 style="font-size: 32px; font-weight: 700; margin: 0 0 10px 0; color: #ffffff;">GJS</h2>
+            <h3 style="font-size: 18px; font-weight: 300; letter-spacing: 0.1em; color: #cccccc; margin: 0;">20th YEAR CELEBRATION</h3>
           </div>
           
           <!-- Main Content -->

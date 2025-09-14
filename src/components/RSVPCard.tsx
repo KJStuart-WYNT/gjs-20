@@ -122,8 +122,6 @@ const RSVPCard = ({ firstName, lastName, email }: RSVPCardProps) => {
                 </a>
                 <a
                   href="ms-outlook://calendar/action/compose?subject=GJS%2020th%20Year%20Celebration&startdt=2025-10-30T06:30:00Z&enddt=2025-10-30T09:00:00Z&body=The%20GJS%20Property%20Team%20would%20love%20you%20to%20join%20us%20for%20our%2020th%20year%20Celebration%20for%20a%20canap%C3%A9%20and%20drink%20or%20two%20%F0%9F%A5%82&location=Level%2010%2C%20Shell%20House%2C%2037%20Margaret%20Street%2C%20Sydney%20(Via%20Wynyard%20Lane)"
-                  target="_blank"
-                  rel="noopener noreferrer"
                   className="px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium transition-colors duration-200 flex items-center gap-2"
                 >
                   <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
@@ -132,9 +130,7 @@ const RSVPCard = ({ firstName, lastName, email }: RSVPCardProps) => {
                   Outlook
                 </a>
                 <a
-                  href="https://calendar.apple.com/calendar/event?title=GJS%2020th%20Year%20Celebration&startDate=2025-10-30T06:30:00Z&endDate=2025-10-30T09:00:00Z&notes=The%20GJS%20Property%20Team%20would%20love%20you%20to%20join%20us%20for%20our%2020th%20year%20Celebration%20for%20a%20canap%C3%A9%20and%20drink%20or%20two%20%F0%9F%A5%82&location=Level%2010%2C%20Shell%20House%2C%2037%20Margaret%20Street%2C%20Sydney%20(Via%20Wynyard%20Lane)"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href="webcal://p01-calendarws.icloud.com/published/2/MTUyMzQwOTI1ODQ1MTUyM3xGSlMgMjB0aCBZZWFyIENlbGVicmF0aW9ufEdKUyBQcm9wZXJ0eSBUZWFtIHdvdWxkIGxvdmUgeW91IHRvIGpvaW4gdXMgZm9yIG91ciAyMHRoIHllYXIgQ2VsZWJyYXRpb24gZm9yIGEgY2FuYXDDqSBhbmQgZHJpbmsgb3IgdHdvIOKApnwyMDI1LTEwLTMwVDA2OjMwOjAwWi8yMDI1LTEwLTMwVDA5OjAwOjAwWnxMZXZlbCAxMCwgU2hlbGwgSG91c2UsIDM3IE1hcmdhcmV0IFN0cmVldCwgU3lkbmV5IChWaWEgV3lueWFyZCBMYW5lKQ"
                   className="px-6 py-3 bg-gray-800 hover:bg-gray-900 text-white rounded-lg font-medium transition-colors duration-200 flex items-center gap-2"
                 >
                   <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">

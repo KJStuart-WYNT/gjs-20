@@ -15,10 +15,6 @@ const rsvpSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
-    // Rate limiting check (basic implementation)
-    const ip = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
-    const rateLimitKey = `rsvp_${ip}`;
-    
     // Check if Resend API key is configured
     if (!process.env.RESEND_API_KEY || process.env.RESEND_API_KEY === 're_placeholder') {
       return NextResponse.json(
@@ -33,7 +29,7 @@ export async function POST(request: NextRequest) {
     const validationResult = rsvpSchema.safeParse(body);
     if (!validationResult.success) {
       return NextResponse.json(
-        { success: false, message: 'Invalid input data', errors: validationResult.error.errors },
+        { success: false, message: 'Invalid input data', errors: validationResult.error.issues },
         { status: 400 }
       );
     }
@@ -106,7 +102,7 @@ export async function POST(request: NextRequest) {
     });
 
     // Email to organizer (RSVP notification)
-    const organizerEmail = await resend.emails.send({
+    await resend.emails.send({
       from: 'GJS Property Team <noreply@gjsproperty.events>',
       to: [process.env.ORGANIZER_EMAIL || 'organizer@gjsproperty.events'],
       subject: `New RSVP - ${sanitizedName} - GJS 20th Year Celebration`,

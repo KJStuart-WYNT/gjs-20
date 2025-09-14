@@ -51,18 +51,18 @@ export async function POST(request: NextRequest) {
     const sanitizedEmail = sanitizeHtml(email);
     const sanitizedDietary = dietaryRequirements ? sanitizeHtml(dietaryRequirements) : '';
 
-    // Calendar event details
+    // Calendar event details (Sydney timezone - AEDT in October)
     const eventDate = '20251030';
-    const eventStartTime = '173000';
-    const eventEndTime = '200000';
+    const eventStartTime = '063000'; // 5:30 PM Sydney time in UTC
+    const eventEndTime = '090000';   // 8:00 PM Sydney time in UTC
     const eventTitle = 'GJS 20th Year Celebration';
     const eventDescription = 'The GJS Property Team would love you to join us for our 20th year Celebration for a canapé and drink or two 🥂';
     const eventLocation = 'Level 10, Shell House, 37 Margaret Street, Sydney (Via Wynyard Lane)';
     
-    // Calendar links
+    // Calendar links (Sydney timezone)
     const googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(eventTitle)}&dates=${eventDate}T${eventStartTime}Z/${eventDate}T${eventEndTime}Z&details=${encodeURIComponent(eventDescription)}&location=${encodeURIComponent(eventLocation)}`;
-    const outlookUrl = `ms-outlook://calendar/action/compose?subject=${encodeURIComponent(eventTitle)}&startdt=2025-10-30T17:30:00&enddt=2025-10-30T20:00:00&body=${encodeURIComponent(eventDescription)}&location=${encodeURIComponent(eventLocation)}`;
-    const appleUrl = `https://calendar.apple.com/calendar/event?title=${encodeURIComponent(eventTitle)}&startDate=2025-10-30T17:30:00&endDate=2025-10-30T20:00:00&notes=${encodeURIComponent(eventDescription)}&location=${encodeURIComponent(eventLocation)}`;
+    const outlookUrl = `ms-outlook://calendar/action/compose?subject=${encodeURIComponent(eventTitle)}&startdt=2025-10-30T06:30:00Z&enddt=2025-10-30T09:00:00Z&body=${encodeURIComponent(eventDescription)}&location=${encodeURIComponent(eventLocation)}`;
+    const appleUrl = `https://calendar.apple.com/calendar/event?title=${encodeURIComponent(eventTitle)}&startDate=2025-10-30T06:30:00Z&endDate=2025-10-30T09:00:00Z&notes=${encodeURIComponent(eventDescription)}&location=${encodeURIComponent(eventLocation)}`;
 
     // Email to RSVP person (confirmation)
     const confirmationEmail = await resend.emails.send({

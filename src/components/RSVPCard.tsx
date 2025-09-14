@@ -110,7 +110,7 @@ const RSVPCard = ({ firstName, lastName, email }: RSVPCardProps) => {
               <h3 className="text-lg font-semibold text-white mb-4 text-center">Add to Calendar</h3>
               <div className="flex flex-wrap gap-3 justify-center">
                 <a
-                  href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=GJS%2020th%20Year%20Celebration&dates=20251030T173000Z/20251030T200000Z&details=The%20GJS%20Property%20Team%20would%20love%20you%20to%20join%20us%20for%20our%2020th%20year%20Celebration%20for%20a%20canap%C3%A9%20and%20drink%20or%20two%20%F0%9F%A5%82&location=Level%2010%2C%20Shell%20House%2C%2037%20Margaret%20Street%2C%20Sydney%20(Via%20Wynyard%20Lane)"
+                  href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=GJS%2020th%20Year%20Celebration&dates=20251030T063000Z/20251030T090000Z&details=The%20GJS%20Property%20Team%20would%20love%20you%20to%20join%20us%20for%20our%2020th%20year%20Celebration%20for%20a%20canap%C3%A9%20and%20drink%20or%20two%20%F0%9F%A5%82&location=Level%2010%2C%20Shell%20House%2C%2037%20Margaret%20Street%2C%20Sydney%20(Via%20Wynyard%20Lane)"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors duration-200 flex items-center gap-2"
@@ -121,7 +121,7 @@ const RSVPCard = ({ firstName, lastName, email }: RSVPCardProps) => {
                   Google Calendar
                 </a>
                 <a
-                  href="ms-outlook://calendar/action/compose?subject=GJS%2020th%20Year%20Celebration&startdt=2025-10-30T17:30:00&enddt=2025-10-30T20:00:00&body=The%20GJS%20Property%20Team%20would%20love%20you%20to%20join%20us%20for%20our%2020th%20year%20Celebration%20for%20a%20canap%C3%A9%20and%20drink%20or%20two%20%F0%9F%A5%82&location=Level%2010%2C%20Shell%20House%2C%2037%20Margaret%20Street%2C%20Sydney%20(Via%20Wynyard%20Lane)"
+                  href="ms-outlook://calendar/action/compose?subject=GJS%2020th%20Year%20Celebration&startdt=2025-10-30T06:30:00Z&enddt=2025-10-30T09:00:00Z&body=The%20GJS%20Property%20Team%20would%20love%20you%20to%20join%20us%20for%20our%2020th%20year%20Celebration%20for%20a%20canap%C3%A9%20and%20drink%20or%20two%20%F0%9F%A5%82&location=Level%2010%2C%20Shell%20House%2C%2037%20Margaret%20Street%2C%20Sydney%20(Via%20Wynyard%20Lane)"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium transition-colors duration-200 flex items-center gap-2"
@@ -132,7 +132,7 @@ const RSVPCard = ({ firstName, lastName, email }: RSVPCardProps) => {
                   Outlook
                 </a>
                 <a
-                  href="https://calendar.apple.com/calendar/event?title=GJS%2020th%20Year%20Celebration&startDate=2025-10-30T17:30:00&endDate=2025-10-30T20:00:00&notes=The%20GJS%20Property%20Team%20would%20love%20you%20to%20join%20us%20for%20our%2020th%20year%20Celebration%20for%20a%20canap%C3%A9%20and%20drink%20or%20two%20%F0%9F%A5%82&location=Level%2010%2C%20Shell%20House%2C%2037%20Margaret%20Street%2C%20Sydney%20(Via%20Wynyard%20Lane)"
+                  href="https://calendar.apple.com/calendar/event?title=GJS%2020th%20Year%20Celebration&startDate=2025-10-30T06:30:00Z&endDate=2025-10-30T09:00:00Z&notes=The%20GJS%20Property%20Team%20would%20love%20you%20to%20join%20us%20for%20our%2020th%20year%20Celebration%20for%20a%20canap%C3%A9%20and%20drink%20or%20two%20%F0%9F%A5%82&location=Level%2010%2C%20Shell%20House%2C%2037%20Margaret%20Street%2C%20Sydney%20(Via%20Wynyard%20Lane)"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="px-6 py-3 bg-gray-800 hover:bg-gray-900 text-white rounded-lg font-medium transition-colors duration-200 flex items-center gap-2"

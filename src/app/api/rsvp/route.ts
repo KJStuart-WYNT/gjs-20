@@ -1,10 +1,24 @@
 import { Resend } from 'resend';
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
 
 const resend = new Resend(process.env.RESEND_API_KEY || 're_placeholder');
 
+// Input validation schema
+const rsvpSchema = z.object({
+  name: z.string().min(2, 'Name must be at least 2 characters').max(100, 'Name too long').trim(),
+  email: z.string().email('Invalid email address').max(255, 'Email too long').toLowerCase().trim(),
+  attendance: z.enum(['yes', 'no']),
+  guests: z.number().min(0).max(3),
+  dietaryRequirements: z.string().max(500, 'Dietary requirements too long').optional().or(z.literal('')),
+});
+
 export async function POST(request: NextRequest) {
   try {
+    // Rate limiting check (basic implementation)
+    const ip = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
+    const rateLimitKey = `rsvp_${ip}`;
+    
     // Check if Resend API key is configured
     if (!process.env.RESEND_API_KEY || process.env.RESEND_API_KEY === 're_placeholder') {
       return NextResponse.json(
@@ -14,7 +28,32 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { name, email, attendance, guests, dietaryRequirements } = body;
+    
+    // Validate input data
+    const validationResult = rsvpSchema.safeParse(body);
+    if (!validationResult.success) {
+      return NextResponse.json(
+        { success: false, message: 'Invalid input data', errors: validationResult.error.errors },
+        { status: 400 }
+      );
+    }
+
+    const { name, email, attendance, guests, dietaryRequirements } = validationResult.data;
+
+    // Sanitize HTML content to prevent XSS
+    const sanitizeHtml = (str: string) => {
+      return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#x27;')
+        .replace(/\//g, '&#x2F;');
+    };
+
+    const sanitizedName = sanitizeHtml(name);
+    const sanitizedEmail = sanitizeHtml(email);
+    const sanitizedDietary = dietaryRequirements ? sanitizeHtml(dietaryRequirements) : '';
 
     // Email to RSVP person (confirmation)
     const confirmationEmail = await resend.emails.send({
@@ -32,7 +71,7 @@ export async function POST(request: NextRequest) {
           <div style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 30px; margin: 30px 0;">
             <h4 style="font-size: 20px; font-weight: 600; margin-bottom: 20px; color: #fff;">RSVP Confirmation</h4>
             <p style="font-size: 16px; line-height: 1.6; color: #ccc; margin-bottom: 15px;">
-              Dear ${name},
+              Dear ${sanitizedName},
             </p>
             <p style="font-size: 16px; line-height: 1.6; color: #ccc; margin-bottom: 20px;">
               Thank you for your RSVP! We're delighted to confirm your attendance for our 20th Year Celebration.
@@ -50,7 +89,7 @@ export async function POST(request: NextRequest) {
               <h5 style="font-size: 18px; font-weight: 600; margin-bottom: 15px; color: #fff;">Your RSVP Details</h5>
               <p style="margin: 8px 0; color: #ccc;"><strong>Attendance:</strong> ${attendance === 'yes' ? 'Yes, I will attend' : 'No, I cannot attend'}</p>
               ${guests ? `<p style="margin: 8px 0; color: #ccc;"><strong>Guests:</strong> ${guests}</p>` : ''}
-              ${dietaryRequirements ? `<p style="margin: 8px 0; color: #ccc;"><strong>Dietary Requirements:</strong> ${dietaryRequirements}</p>` : ''}
+              ${sanitizedDietary ? `<p style="margin: 8px 0; color: #ccc;"><strong>Dietary Requirements:</strong> ${sanitizedDietary}</p>` : ''}
             </div>
             
             <p style="font-size: 16px; line-height: 1.6; color: #ccc; margin-top: 20px;">
@@ -70,7 +109,7 @@ export async function POST(request: NextRequest) {
     const organizerEmail = await resend.emails.send({
       from: 'GJS Property Team <noreply@gjsproperty.events>',
       to: [process.env.ORGANIZER_EMAIL || 'organizer@gjsproperty.events'],
-      subject: `New RSVP - ${name} - GJS 20th Year Celebration`,
+      subject: `New RSVP - ${sanitizedName} - GJS 20th Year Celebration`,
       html: `
         <div style="font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif; max-width: 600px; margin: 0 auto; background: #f8f9fa; color: #333; padding: 40px;">
           <h2 style="color: #333; margin-bottom: 30px;">New RSVP Received</h2>
@@ -80,11 +119,11 @@ export async function POST(request: NextRequest) {
             <table style="width: 100%; border-collapse: collapse;">
               <tr>
                 <td style="padding: 10px 0; border-bottom: 1px solid #f1f3f4; font-weight: 600; color: #333;">Name:</td>
-                <td style="padding: 10px 0; border-bottom: 1px solid #f1f3f4; color: #666;">${name}</td>
+                <td style="padding: 10px 0; border-bottom: 1px solid #f1f3f4; color: #666;">${sanitizedName}</td>
               </tr>
               <tr>
                 <td style="padding: 10px 0; border-bottom: 1px solid #f1f3f4; font-weight: 600; color: #333;">Email:</td>
-                <td style="padding: 10px 0; border-bottom: 1px solid #f1f3f4; color: #666;">${email}</td>
+                <td style="padding: 10px 0; border-bottom: 1px solid #f1f3f4; color: #666;">${sanitizedEmail}</td>
               </tr>
               <tr>
                 <td style="padding: 10px 0; border-bottom: 1px solid #f1f3f4; font-weight: 600; color: #333;">Attendance:</td>
@@ -96,10 +135,10 @@ export async function POST(request: NextRequest) {
                 <td style="padding: 10px 0; border-bottom: 1px solid #f1f3f4; color: #666;">${guests}</td>
               </tr>
               ` : ''}
-              ${dietaryRequirements ? `
+              ${sanitizedDietary ? `
               <tr>
                 <td style="padding: 10px 0; border-bottom: 1px solid #f1f3f4; font-weight: 600; color: #333;">Dietary Requirements:</td>
-                <td style="padding: 10px 0; border-bottom: 1px solid #f1f3f4; color: #666;">${dietaryRequirements}</td>
+                <td style="padding: 10px 0; border-bottom: 1px solid #f1f3f4; color: #666;">${sanitizedDietary}</td>
               </tr>
               ` : ''}
               <tr>

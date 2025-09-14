@@ -1,0 +1,10 @@
+Contact: security@gjsproperty.events
+Expires: 2025-12-31T23:59:59.000Z
+Encryption: https://gjsproperty.events/pgp-key.txt
+Preferred-Languages: en
+Canonical: https://gjsproperty.events/.well-known/security.txt
+Policy: https://gjsproperty.events/security-policy
+
+# Security Policy
+# This is a private event invitation site
+# Please report security issues responsibly

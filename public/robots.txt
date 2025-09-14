@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /
+
+# This is a private event invitation site
+# No search engine indexing allowed

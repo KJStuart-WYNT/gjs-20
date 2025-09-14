@@ -10,7 +10,6 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: 'GJS 20th Year Celebration - You\'re Invited',
   description: 'Join the GJS Property Team for our 20th year celebration! An evening of celebration, connection, and cheers to two decades of excellence.',
-  keywords: 'GJS Property, 20th anniversary, celebration, event, Sydney, real estate',
   authors: [{ name: 'GJS Property Team' }],
   creator: 'GJS Property',
   publisher: 'GJS Property',
@@ -19,38 +18,22 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL('https://gjs-20.vercel.app'),
-  openGraph: {
-    title: 'GJS 20th Year Celebration - You\'re Invited',
-    description: 'Join the GJS Property Team for our 20th year celebration! An evening of celebration, connection, and cheers to two decades of excellence.',
-    url: 'https://gjs-20.vercel.app',
-    siteName: 'GJS 20th Year Celebration',
-    images: [
-      {
-        url: '/og-image.jpg',
-        width: 1200,
-        height: 630,
-        alt: 'GJS 20th Year Celebration Invitation',
-      },
-    ],
-    locale: 'en_AU',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'GJS 20th Year Celebration - You\'re Invited',
-    description: 'Join the GJS Property Team for our 20th year celebration!',
-    images: ['/og-image.jpg'],
-  },
+  metadataBase: new URL('https://gjsproperty.events'),
+  // Block search engines - this is a private event invitation
   robots: {
-    index: true,
-    follow: true,
+    index: false,
+    follow: false,
+    noarchive: true,
+    nosnippet: true,
+    noimageindex: true,
+    nocache: true,
     googleBot: {
-      index: true,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
+      index: false,
+      follow: false,
+      noarchive: true,
+      nosnippet: true,
+      noimageindex: true,
+      nocache: true,
     },
   },
   icons: {
@@ -58,7 +41,6 @@ export const metadata: Metadata = {
     shortcut: '/favicon-16x16.png',
     apple: '/apple-touch-icon.png',
   },
-  manifest: '/site.webmanifest',
 }
 
 export default function RootLayout({

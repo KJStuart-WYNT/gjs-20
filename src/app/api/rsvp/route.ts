@@ -61,7 +61,7 @@ export async function POST(request: NextRequest) {
     
     // Calendar links
     const googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(eventTitle)}&dates=${eventDate}T${eventStartTime}Z/${eventDate}T${eventEndTime}Z&details=${encodeURIComponent(eventDescription)}&location=${encodeURIComponent(eventLocation)}`;
-    const outlookUrl = `https://outlook.live.com/calendar/0/deeplink/compose?subject=${encodeURIComponent(eventTitle)}&startdt=2025-10-30T17:30:00&enddt=2025-10-30T20:00:00&body=${encodeURIComponent(eventDescription)}&location=${encodeURIComponent(eventLocation)}`;
+    const outlookUrl = `ms-outlook://calendar/action/compose?subject=${encodeURIComponent(eventTitle)}&startdt=2025-10-30T17:30:00&enddt=2025-10-30T20:00:00&body=${encodeURIComponent(eventDescription)}&location=${encodeURIComponent(eventLocation)}`;
     const appleUrl = `https://calendar.apple.com/calendar/event?title=${encodeURIComponent(eventTitle)}&startDate=2025-10-30T17:30:00&endDate=2025-10-30T20:00:00&notes=${encodeURIComponent(eventDescription)}&location=${encodeURIComponent(eventLocation)}`;
 
     // Email to RSVP person (confirmation)

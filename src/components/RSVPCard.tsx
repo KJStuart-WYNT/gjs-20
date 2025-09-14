@@ -121,7 +121,7 @@ const RSVPCard = ({ firstName, lastName, email }: RSVPCardProps) => {
                   Google Calendar
                 </a>
                 <a
-                  href="https://outlook.live.com/calendar/0/deeplink/compose?subject=GJS%2020th%20Year%20Celebration&startdt=2025-10-30T17:30:00&enddt=2025-10-30T20:00:00&body=The%20GJS%20Property%20Team%20would%20love%20you%20to%20join%20us%20for%20our%2020th%20year%20Celebration%20for%20a%20canap%C3%A9%20and%20drink%20or%20two%20%F0%9F%A5%82&location=Level%2010%2C%20Shell%20House%2C%2037%20Margaret%20Street%2C%20Sydney%20(Via%20Wynyard%20Lane)"
+                  href="ms-outlook://calendar/action/compose?subject=GJS%2020th%20Year%20Celebration&startdt=2025-10-30T17:30:00&enddt=2025-10-30T20:00:00&body=The%20GJS%20Property%20Team%20would%20love%20you%20to%20join%20us%20for%20our%2020th%20year%20Celebration%20for%20a%20canap%C3%A9%20and%20drink%20or%20two%20%F0%9F%A5%82&location=Level%2010%2C%20Shell%20House%2C%2037%20Margaret%20Street%2C%20Sydney%20(Via%20Wynyard%20Lane)"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium transition-colors duration-200 flex items-center gap-2"

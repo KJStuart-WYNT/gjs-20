@@ -2,7 +2,6 @@ export interface RSVPFormData {
   name: string
   email: string
   attendance: 'yes' | 'no'
-  guests: number
   dietary: string
 }
 

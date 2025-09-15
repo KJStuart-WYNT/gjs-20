@@ -5,7 +5,7 @@ import { motion } from 'framer-motion'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { CheckCircle, Send, User, Mail, Users, Utensils } from 'lucide-react'
+import { CheckCircle, Send, User, Mail, Utensils } from 'lucide-react'
 
 const rsvpSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
@@ -13,7 +13,6 @@ const rsvpSchema = z.object({
   attendance: z.enum(['yes', 'no']).refine((val) => val !== undefined, {
     message: 'Please select your attendance',
   }),
-  guests: z.number().min(0).max(3),
   dietary: z.string().optional(),
 })
 
@@ -34,14 +33,11 @@ const RSVPCard = ({ firstName, lastName, email }: RSVPCardProps) => {
     handleSubmit,
     formState: { errors },
     reset,
-    watch,
-    setValue,
   } = useForm<RSVPFormValues>({
     resolver: zodResolver(rsvpSchema),
     defaultValues: {
       name: firstName && lastName ? `${firstName} ${lastName}` : firstName || '',
       email: email || '',
-      guests: 0,
     },
   })
 
@@ -58,7 +54,6 @@ const RSVPCard = ({ firstName, lastName, email }: RSVPCardProps) => {
           name: data.name,
           email: data.email,
           attendance: data.attendance,
-          guests: data.guests,
           dietaryRequirements: data.dietary,
         }),
       })
@@ -110,7 +105,7 @@ const RSVPCard = ({ firstName, lastName, email }: RSVPCardProps) => {
               <h3 className="text-lg font-semibold text-white mb-4 text-center">Add to Calendar</h3>
               <div className="flex flex-wrap gap-3 justify-center">
                 <a
-                  href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=GJS%2020th%20Year%20Celebration&dates=20251030T063000Z/20251030T090000Z&details=The%20GJS%20Property%20Team%20would%20love%20you%20to%20join%20us%20for%20our%2020th%20year%20Celebration%20for%20a%20canap%C3%A9%20and%20drink%20or%20two%20%F0%9F%A5%82&location=Level%2010%2C%20Shell%20House%2C%2037%20Margaret%20Street%2C%20Sydney%20(Via%20Wynyard%20Lane)"
+                  href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=GJS%2020th%20Year%20Celebration&dates=20251030T050000Z/20251030T090000Z&details=The%20GJS%20Property%20Team%20would%20love%20you%20to%20join%20us%20for%20our%2020th%20year%20Celebration%20for%20some%20canap%C3%A9s%20and%20drink%20or%20two%20%F0%9F%A5%82&location=Level%2010%2C%20Shell%20House%2C%2037%20Margaret%20Street%2C%20Sydney%20(Via%20Wynyard%20Lane)"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors duration-200 flex items-center gap-2"
@@ -121,7 +116,7 @@ const RSVPCard = ({ firstName, lastName, email }: RSVPCardProps) => {
                   Google Calendar
                 </a>
                 <a
-                  href="ms-outlook://calendar/action/compose?subject=GJS%2020th%20Year%20Celebration&startdt=2025-10-30T06:30:00Z&enddt=2025-10-30T09:00:00Z&body=The%20GJS%20Property%20Team%20would%20love%20you%20to%20join%20us%20for%20our%2020th%20year%20Celebration%20for%20a%20canap%C3%A9%20and%20drink%20or%20two%20%F0%9F%A5%82&location=Level%2010%2C%20Shell%20House%2C%2037%20Margaret%20Street%2C%20Sydney%20(Via%20Wynyard%20Lane)"
+                  href="ms-outlook://calendar/action/compose?subject=GJS%2020th%20Year%20Celebration&startdt=2025-10-30T05:00:00Z&enddt=2025-10-30T09:00:00Z&body=The%20GJS%20Property%20Team%20would%20love%20you%20to%20join%20us%20for%20our%2020th%20year%20Celebration%20for%20some%20canap%C3%A9s%20and%20drink%20or%20two%20%F0%9F%A5%82&location=Level%2010%2C%20Shell%20House%2C%2037%20Margaret%20Street%2C%20Sydney%20(Via%20Wynyard%20Lane)"
                   className="px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium transition-colors duration-200 flex items-center gap-2"
                 >
                   <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
@@ -130,7 +125,7 @@ const RSVPCard = ({ firstName, lastName, email }: RSVPCardProps) => {
                   Outlook
                 </a>
                 <a
-                  href="webcal://p01-calendarws.icloud.com/published/2/MTUyMzQwOTI1ODQ1MTUyM3xGSlMgMjB0aCBZZWFyIENlbGVicmF0aW9ufEdKUyBQcm9wZXJ0eSBUZWFtIHdvdWxkIGxvdmUgeW91IHRvIGpvaW4gdXMgZm9yIG91ciAyMHRoIHllYXIgQ2VsZWJyYXRpb24gZm9yIGEgY2FuYXDDqSBhbmQgZHJpbmsgb3IgdHdvIOKApnwyMDI1LTEwLTMwVDA2OjMwOjAwWi8yMDI1LTEwLTMwVDA5OjAwOjAwWnxMZXZlbCAxMCwgU2hlbGwgSG91c2UsIDM3IE1hcmdhcmV0IFN0cmVldCwgU3lkbmV5IChWaWEgV3lueWFyZCBMYW5lKQ"
+                  href="webcal://p01-calendarws.icloud.com/published/2/MTUyMzQwOTI1ODQ1MTUyM3xGSlMgMjB0aCBZZWFyIENlbGVicmF0aW9ufEdKUyBQcm9wZXJ0eSBUZWFtIHdvdWxkIGxvdmUgeW91IHRvIGpvaW4gdXMgZm9yIG91ciAyMHRoIHllYXIgQ2VsZWJyYXRpb24gZm9yIGEgY2FuYXDDqSBhbmQgZHJpbmsgb3IgdHdvIOKApnwyMDI1LTEwLTMwVDA1OjAwOjAwWi8yMDI1LTEwLTMwVDA5OjAwOjAwWnxMZXZlbCAxMCwgU2hlbGwgSG91c2UsIDM3IE1hcmdhcmV0IFN0cmVldCwgU3lkbmV5IChWaWEgV3lueWFyZCBMYW5lKQ"
                   className="px-6 py-3 bg-gray-800 hover:bg-gray-900 text-white rounded-lg font-medium transition-colors duration-200 flex items-center gap-2"
                 >
                   <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
@@ -234,45 +229,6 @@ const RSVPCard = ({ firstName, lastName, email }: RSVPCardProps) => {
             )}
           </div>
 
-          {/* Guests Field */}
-          <div>
-            <label className="form-label">
-              <Users className="w-5 h-5 inline mr-2" />
-              Number of Guests
-            </label>
-            <div className="grid grid-cols-2 gap-3 mt-3">
-              {[
-                { value: 0, label: 'Just me' },
-                { value: 1, label: '+1 Guest' },
-                { value: 2, label: '+2 Guests' },
-                { value: 3, label: '+3 Guests' }
-              ].map((option) => (
-                <motion.button
-                  key={option.value}
-                  type="button"
-                  className={`
-                    relative px-6 py-4 rounded-2xl border-2 transition-all duration-300 text-center font-medium
-                    ${watch('guests') === option.value
-                      ? 'border-white/40 bg-white/10 text-white shadow-lg backdrop-blur-sm'
-                      : 'border-white/20 bg-white/5 text-white/70 hover:border-white/30 hover:bg-white/8 hover:text-white/90'
-                    }
-                  `}
-                  onClick={() => setValue('guests', option.value)}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  {option.label}
-                  {watch('guests') === option.value && (
-                    <motion.div
-                      className="absolute inset-0 rounded-2xl border border-white/20 bg-gradient-to-r from-white/5 to-white/10"
-                      layoutId="guest-selection"
-                      transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                    />
-                  )}
-                </motion.button>
-              ))}
-            </div>
-          </div>
 
           {/* Dietary Requirements */}
           <div>

@@ -9,7 +9,6 @@ const rsvpSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters').max(100, 'Name too long').trim(),
   email: z.string().email('Invalid email address').max(255, 'Email too long').toLowerCase().trim(),
   attendance: z.enum(['yes', 'no']),
-  guests: z.number().min(0).max(3),
   dietaryRequirements: z.string().max(500, 'Dietary requirements too long').optional().or(z.literal('')),
 });
 
@@ -34,7 +33,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { name, email, attendance, guests, dietaryRequirements } = validationResult.data;
+    const { name, email, attendance, dietaryRequirements } = validationResult.data;
 
     // Sanitize HTML content to prevent XSS
     const sanitizeHtml = (str: string) => {
@@ -53,16 +52,16 @@ export async function POST(request: NextRequest) {
 
     // Calendar event details (Sydney timezone - AEDT in October)
     const eventDate = '20251030';
-    const eventStartTime = '063000'; // 5:30 PM Sydney time in UTC
+    const eventStartTime = '050000'; // 4:00 PM Sydney time in UTC
     const eventEndTime = '090000';   // 8:00 PM Sydney time in UTC
     const eventTitle = 'GJS 20th Year Celebration';
-    const eventDescription = 'The GJS Property Team would love you to join us for our 20th year Celebration for a canapé and drink or two 🥂';
+    const eventDescription = 'The GJS Property Team would love you to join us for our 20th year Celebration for some canapés and drink or two 🥂';
     const eventLocation = 'Level 10, Shell House, 37 Margaret Street, Sydney (Via Wynyard Lane)';
     
     // Calendar links (Sydney timezone)
     const googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(eventTitle)}&dates=${eventDate}T${eventStartTime}Z/${eventDate}T${eventEndTime}Z&details=${encodeURIComponent(eventDescription)}&location=${encodeURIComponent(eventLocation)}`;
-    const outlookUrl = `ms-outlook://calendar/action/compose?subject=${encodeURIComponent(eventTitle)}&startdt=2025-10-30T06:30:00Z&enddt=2025-10-30T09:00:00Z&body=${encodeURIComponent(eventDescription)}&location=${encodeURIComponent(eventLocation)}`;
-    const appleUrl = `webcal://p01-calendarws.icloud.com/published/2/MTUyMzQwOTI1ODQ1MTUyM3xGSlMgMjB0aCBZZWFyIENlbGVicmF0aW9ufEdKUyBQcm9wZXJ0eSBUZWFtIHdvdWxkIGxvdmUgeW91IHRvIGpvaW4gdXMgZm9yIG91ciAyMHRoIHllYXIgQ2VsZWJyYXRpb24gZm9yIGEgY2FuYXDDqSBhbmQgZHJpbmsgb3IgdHdvIOKApnwyMDI1LTEwLTMwVDA2OjMwOjAwWi8yMDI1LTEwLTMwVDA5OjAwOjAwWnxMZXZlbCAxMCwgU2hlbGwgSG91c2UsIDM3IE1hcmdhcmV0IFN0cmVldCwgU3lkbmV5IChWaWEgV3lueWFyZCBMYW5lKQ`;
+    const outlookUrl = `ms-outlook://calendar/action/compose?subject=${encodeURIComponent(eventTitle)}&startdt=2025-10-30T05:00:00Z&enddt=2025-10-30T09:00:00Z&body=${encodeURIComponent(eventDescription)}&location=${encodeURIComponent(eventLocation)}`;
+    const appleUrl = `webcal://p01-calendarws.icloud.com/published/2/MTUyMzQwOTI1ODQ1MTUyM3xGSlMgMjB0aCBZZWFyIENlbGVicmF0aW9ufEdKUyBQcm9wZXJ0eSBUZWFtIHdvdWxkIGxvdmUgeW91IHRvIGpvaW4gdXMgZm9yIG91ciAyMHRoIHllYXIgQ2VsZWJyYXRpb24gZm9yIGEgY2FuYXDDqSBhbmQgZHJpbmsgb3IgdHdvIOKApnwyMDI1LTEwLTMwVDA1OjAwOjAwWi8yMDI1LTEwLTMwVDA5OjAwOjAwWnxMZXZlbCAxMCwgU2hlbGwgSG91c2UsIDM3IE1hcmdhcmV0IFN0cmVldCwgU3lkbmV5IChWaWEgV3lueWFyZCBMYW5lKQ`;
 
     // Email to RSVP person (confirmation)
     const confirmationEmail = await resend.emails.send({
@@ -102,7 +101,7 @@ export async function POST(request: NextRequest) {
               </div>
               <div style="margin-bottom: 15px;">
                 <strong style="color: #333333; font-size: 16px;">Time:</strong>
-                <span style="color: #555555; font-size: 16px; margin-left: 8px;">5:30 PM - 8:00 PM</span>
+                <span style="color: #555555; font-size: 16px; margin-left: 8px;">4:00 PM - 8:00 PM</span>
               </div>
               <div style="margin-bottom: 15px;">
                 <strong style="color: #333333; font-size: 16px;">Location:</strong>
@@ -132,12 +131,6 @@ export async function POST(request: NextRequest) {
                 <strong style="color: #333333; font-size: 16px;">Attendance:</strong>
                 <span style="color: #555555; font-size: 16px; margin-left: 8px;">${attendance === 'yes' ? '✅ Yes, I will attend' : '❌ No, I cannot attend'}</span>
               </div>
-              ${guests ? `
-              <div style="margin-bottom: 15px;">
-                <strong style="color: #333333; font-size: 16px;">Guests:</strong>
-                <span style="color: #555555; font-size: 16px; margin-left: 8px;">${guests}</span>
-              </div>
-              ` : ''}
               ${sanitizedDietary ? `
               <div style="margin-bottom: 0;">
                 <strong style="color: #333333; font-size: 16px;">Dietary Requirements:</strong>
@@ -185,12 +178,6 @@ export async function POST(request: NextRequest) {
                 <td style="padding: 10px 0; border-bottom: 1px solid #f1f3f4; font-weight: 600; color: #333;">Attendance:</td>
                 <td style="padding: 10px 0; border-bottom: 1px solid #f1f3f4; color: #666;">${attendance === 'yes' ? 'Yes, will attend' : 'No, cannot attend'}</td>
               </tr>
-              ${guests ? `
-              <tr>
-                <td style="padding: 10px 0; border-bottom: 1px solid #f1f3f4; font-weight: 600; color: #333;">Guests:</td>
-                <td style="padding: 10px 0; border-bottom: 1px solid #f1f3f4; color: #666;">${guests}</td>
-              </tr>
-              ` : ''}
               ${sanitizedDietary ? `
               <tr>
                 <td style="padding: 10px 0; border-bottom: 1px solid #f1f3f4; font-weight: 600; color: #333;">Dietary Requirements:</td>

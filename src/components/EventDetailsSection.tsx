@@ -15,7 +15,7 @@ const EventDetailsSection = () => {
     {
       icon: Clock,
       title: 'Time',
-      content: '5:30 PM - 8:00 PM',
+      content: '4:00 PM - 8:00 PM',
       color: 'text-purple-500',
       bgColor: 'bg-purple-50',
     },
@@ -125,14 +125,17 @@ const EventDetailsSection = () => {
             <h3 className="text-2xl md:text-3xl font-bold text-white mb-6">
               What to Expect
             </h3>
-            <p className="text-lg text-white/70 mb-10 leading-relaxed font-light">
+            <p className="text-lg text-white/70 mb-6 leading-relaxed font-light">
               An exclusive evening featuring premium experiences, gourmet cuisine, 
               and the opportunity to connect with industry leaders who have been 
               part of our remarkable journey over the past two decades.
             </p>
+            <p className="text-base text-white/60 mb-10 leading-relaxed font-light italic">
+              Starting from 4pm until 8pm - feel free to arrive when convenient for you!
+            </p>
             <div className="flex flex-wrap justify-center gap-4 text-sm">
               <span className="glass px-6 py-3 rounded-full text-white/90 border border-white/20">🍾 Premium Drinks</span>
-              <span className="glass px-6 py-3 rounded-full text-white/90 border border-white/20">🥂 Gourmet Canapés</span>
+              <span className="glass px-6 py-3 rounded-full text-white/90 border border-white/20">🥂 Some Canapés</span>
               <span className="glass px-6 py-3 rounded-full text-white/90 border border-white/20">🎵 Live Music</span>
               <span className="glass px-6 py-3 rounded-full text-white/90 border border-white/20">📸 Photo Experience</span>
               <span className="glass px-6 py-3 rounded-full text-white/90 border border-white/20">🎁 Exclusive Gifts</span>

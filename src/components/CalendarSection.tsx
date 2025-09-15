@@ -141,7 +141,7 @@ const CalendarSection = () => {
                   <div className="w-6 h-6 text-purple-400 mt-1 flex-shrink-0">🎉</div>
                   <div>
                     <div className="font-semibold text-white text-lg">What to Expect</div>
-                    <div className="text-white/70">Gourmet canapés, premium drinks, live music, and exclusive networking</div>
+                    <div className="text-white/70">Some canapés, premium drinks, live music, and exclusive networking</div>
                   </div>
                 </div>
                 

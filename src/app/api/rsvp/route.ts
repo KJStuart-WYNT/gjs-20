@@ -52,8 +52,8 @@ export async function POST(request: NextRequest) {
 
     // Calendar event details (Sydney timezone - AEDT in October)
     const eventDate = '20251030';
-    const eventStartTime = '050000'; // 4:00 PM Sydney time in UTC
-    const eventEndTime = '090000';   // 8:00 PM Sydney time in UTC
+    const eventStartTime = '050000'; // 4:00 PM Sydney time in UTC (AEDT is UTC+11)
+    const eventEndTime = '090000';   // 8:00 PM Sydney time in UTC (AEDT is UTC+11)
     const eventTitle = 'GJS 20th Year Celebration';
     const eventDescription = 'The GJS Property Team would love you to join us for our 20th year Celebration for some canapés and drink or two 🥂';
     const eventLocation = 'Level 10, Shell House, 37 Margaret Street, Sydney (Via Wynyard Lane)';
@@ -107,9 +107,12 @@ export async function POST(request: NextRequest) {
                 <strong style="color: #333333; font-size: 16px;">Location:</strong>
                 <span style="color: #555555; font-size: 16px; margin-left: 8px;">Level 10, Shell House, 37 Margaret Street, Sydney</span>
               </div>
-              <div style="margin-bottom: 0;">
+              <div style="margin-bottom: 15px;">
                 <strong style="color: #333333; font-size: 16px;">Access:</strong>
                 <span style="color: #555555; font-size: 16px; margin-left: 8px;">Via Wynyard Lane</span>
+              </div>
+              <div style="margin-bottom: 0;">
+                <span style="color: #666666; font-size: 14px; font-style: italic;">Starting from 4pm until 8pm - feel free to arrive when convenient for you!</span>
               </div>
             </div>
             

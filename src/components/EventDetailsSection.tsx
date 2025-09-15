@@ -8,7 +8,7 @@ const EventDetailsSection = () => {
     {
       icon: Calendar,
       title: 'Date',
-      content: 'Thursday, 30th October 2024',
+      content: 'Thursday, 30th October 2025',
       color: 'text-blue-500',
       bgColor: 'bg-blue-50',
     },

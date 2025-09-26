@@ -1,4 +1,4 @@
-import { Pool } from '@neondatabase/serverless';
+import { Pool } from 'pg';
 
 let pool: Pool | null = null;
 
@@ -26,8 +26,14 @@ export interface InviteRecord {
 
 function getPool(): Pool {
   if (!pool) {
+    const connectionString = process.env.POSTGRES_URL || process.env.DATABASE_URL;
+    if (!connectionString) {
+      throw new Error('Database connection string not found');
+    }
+    
     pool = new Pool({ 
-      connectionString: process.env.POSTGRES_URL || process.env.DATABASE_URL 
+      connectionString: connectionString,
+      ssl: { rejectUnauthorized: false }
     });
   }
   return pool;
@@ -67,14 +73,31 @@ export async function initTables() {
     await client.query(`CREATE INDEX IF NOT EXISTS idx_rsvps_email ON rsvps(email)`);
     await client.query(`CREATE INDEX IF NOT EXISTS idx_invites_email ON invites(email)`);
     await client.query(`CREATE INDEX IF NOT EXISTS idx_rsvps_date ON rsvps(rsvp_date)`);
+    
+    console.log('Database tables initialized successfully');
   } catch (error) {
     console.error('Error initializing tables:', error);
+    // Don't throw - let the app continue without tables for now
   }
 }
 
-// Initialize tables on module load
-if (typeof window === 'undefined') {
-  initTables();
+// Initialize tables when database operations are first called
+async function ensureTables() {
+  try {
+    const client = getPool();
+    const result = await client.query(`
+      SELECT to_regclass('public.rsvps') as exists
+    `);
+    
+    // Only run table creation if table doesn't exist
+    if (!result.rows[0].exists) {
+      console.log('Tables not found, initializing...');
+      await initTables();
+    }
+  } catch (error) {
+    console.log('Checking table status, initializing if needed:', error instanceof Error ? error.message : 'Unknown error');
+    await initTables();
+  }
 }
 
 export const dbOperations = {
@@ -87,6 +110,7 @@ export const dbOperations = {
     confirmation_id?: string;
   }) => {
     try {
+      await ensureTables();
       const client = getPool();
       const result = await client.query(`
         INSERT INTO rsvps (name, email, attendance, dietary_requirements, confirmation_id)
@@ -102,6 +126,7 @@ export const dbOperations = {
 
   getAllRSVPs: async (): Promise<RSVPRecord[]> => {
     try {
+      await ensureTables();
       const client = getPool();
       const result = await client.query(`
         SELECT * FROM rsvps ORDER BY created_at DESC
@@ -115,6 +140,7 @@ export const dbOperations = {
 
   getRSVPByEmail: async (email: string): Promise<RSVPRecord | null> => {
     try {
+      await ensureTables();
       const client = getPool();
       const result = await client.query(`
         SELECT * FROM rsvps WHERE email = $1 ORDER BY created_at DESC LIMIT 1
@@ -133,6 +159,7 @@ export const dbOperations = {
     invite_url?: string;
   }) => {
     try {
+      await ensureTables();
       const client = getPool();
       const result = await client.query(`
         INSERT INTO invites (name, email, invite_url)
@@ -148,6 +175,7 @@ export const dbOperations = {
 
   updateInviteStatus: async (email: string, status: 'sent' | 'responded' | 'declined', rsvp_id?: number) => {
     try {
+      await ensureTables();
       const client = getPool();
       await client.query(`
         UPDATE invites 
@@ -162,6 +190,7 @@ export const dbOperations = {
 
   getAllInvites: async (): Promise<InviteRecord[]> => {
     try {
+      await ensureTables();
       const client = getPool();
       const result = await client.query(`
         SELECT * FROM invites ORDER BY created_at DESC

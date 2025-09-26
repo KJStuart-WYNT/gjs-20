@@ -12,10 +12,10 @@ export async function GET(request: NextRequest) {
     let filename = '';
 
     if (type === 'rsvps') {
-      data = dbOperations.getAllRSVPs();
+      data = dbOperations.getAllRSVPs() as Array<Record<string, unknown>>;
       filename = `GJS_20th_Anniversary_RSVPs_${new Date().toISOString().split('T')[0]}`;
     } else if (type === 'invites') {
-      data = dbOperations.getAllInvites();
+      data = dbOperations.getAllInvites() as Array<Record<string, unknown>>;
       filename = `GJS_20th_Anniversary_Invites_${new Date().toISOString().split('T')[0]}`;
     } else if (type === 'summary') {
       const rsvps = dbOperations.getAllRSVPs();

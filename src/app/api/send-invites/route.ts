@@ -21,11 +21,11 @@ export async function POST(request: NextRequest) {
 
     if (sendToAll) {
       // Get all pending invites
-      const allInvites = dbOperations.getAllInvites();
+      const allInvites = await dbOperations.getAllInvites();
       invitesToSend = allInvites.filter(invite => invite.status === 'pending');
     } else if (inviteIds && Array.isArray(inviteIds)) {
       // Get specific invites
-      const allInvites = dbOperations.getAllInvites();
+      const allInvites = await dbOperations.getAllInvites();
       invitesToSend = allInvites.filter(invite => inviteIds.includes(invite.id));
     } else {
       return NextResponse.json(
@@ -57,7 +57,7 @@ export async function POST(request: NextRequest) {
 
         if (emailResult.data?.id) {
           // Update invite status
-          dbOperations.updateInviteStatus(invite.email, 'sent');
+          await dbOperations.updateInviteStatus(invite.email, 'sent');
           
           results.push({
             email: invite.email,

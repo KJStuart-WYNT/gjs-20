@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
       for (const invite of invites) {
         try {
           // Check if invite already exists
-          const existingInvites = dbOperations.getAllInvites();
+          const existingInvites = await dbOperations.getAllInvites();
           const existing = existingInvites.find(i => i.email === invite.email);
           
           if (existing) {
@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
           const inviteUrl = `${process.env.NEXT_PUBLIC_BASE_URL || 'https://gjsproperty.events'}/20-years?name=${encodeURIComponent(invite.name)}&email=${encodeURIComponent(invite.email)}`;
           
           // Create invite record
-          const result = dbOperations.insertInvite({
+          const result = await dbOperations.insertInvite({
             name: invite.name,
             email: invite.email,
             invite_url: inviteUrl
@@ -89,7 +89,7 @@ export async function POST(request: NextRequest) {
       const { name, email } = validationResult.data;
 
       // Check if invite already exists
-      const existingInvites = dbOperations.getAllInvites();
+      const existingInvites = await dbOperations.getAllInvites();
       const existing = existingInvites.find(i => i.email === email);
       
       if (existing) {
@@ -103,7 +103,7 @@ export async function POST(request: NextRequest) {
       const inviteUrl = `${process.env.NEXT_PUBLIC_BASE_URL || 'https://gjsproperty.events'}/20-years?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}`;
       
       // Create invite record
-      const result = dbOperations.insertInvite({
+      const result = await dbOperations.insertInvite({
         name,
         email,
         invite_url: inviteUrl
@@ -128,7 +128,7 @@ export async function POST(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
   try {
-    const invites = dbOperations.getAllInvites();
+    const invites = await dbOperations.getAllInvites();
     
     return NextResponse.json({
       success: true,

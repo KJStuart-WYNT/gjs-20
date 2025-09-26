@@ -12,16 +12,16 @@ export async function GET(request: NextRequest) {
     let filename = '';
 
     if (type === 'rsvps') {
-      data = dbOperations.getAllRSVPs() as unknown as Array<Record<string, unknown>>;
+      data = await dbOperations.getAllRSVPs() as unknown as Array<Record<string, unknown>>;
       filename = `GJS_20th_Anniversary_RSVPs_${new Date().toISOString().split('T')[0]}`;
     } else if (type === 'invites') {
-      data = dbOperations.getAllInvites() as unknown as Array<Record<string, unknown>>;
+      data = await dbOperations.getAllInvites() as unknown as Array<Record<string, unknown>>;
       filename = `GJS_20th_Anniversary_Invites_${new Date().toISOString().split('T')[0]}`;
     } else if (type === 'summary') {
-      const rsvps = dbOperations.getAllRSVPs();
-      const invites = dbOperations.getAllInvites();
-      const rsvpStats = dbOperations.getRSVPStats();
-      const inviteStats = dbOperations.getInviteStats();
+      const rsvps = await dbOperations.getAllRSVPs();
+      const invites = await dbOperations.getAllInvites();
+      const rsvpStats = await dbOperations.getRSVPStats();
+      const inviteStats = await dbOperations.getInviteStats();
       
       // Create summary data
       data = [
@@ -67,8 +67,8 @@ export async function GET(request: NextRequest) {
 
       if (type === 'summary') {
         // Create multiple sheets for summary
-        const rsvps = dbOperations.getAllRSVPs();
-        const invites = dbOperations.getAllInvites();
+        const rsvps = await dbOperations.getAllRSVPs();
+        const invites = await dbOperations.getAllInvites();
         
         // RSVPs sheet
         if (rsvps.length > 0) {

@@ -158,7 +158,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Store RSVP in database
-    const rsvpResult = dbOperations.insertRSVP({
+    const rsvpResult = await dbOperations.insertRSVP({
       name: sanitizedName,
       email: sanitizedEmail,
       attendance,
@@ -167,7 +167,7 @@ export async function POST(request: NextRequest) {
     });
 
     // Update invite status if this person was invited
-    dbOperations.updateInviteStatus(sanitizedEmail, 'responded', rsvpResult.lastInsertRowid as number);
+    await dbOperations.updateInviteStatus(sanitizedEmail, 'responded', rsvpResult.lastInsertRowid as number);
 
 
     // Email to organizer (RSVP notification) - only if email is configured

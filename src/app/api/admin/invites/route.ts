@@ -3,7 +3,7 @@ import { dbOperations } from '@/lib/database';
 
 export async function GET() {
   try {
-    const invites = dbOperations.getAllInvites();
+    const invites = await dbOperations.getAllInvites();
     
     return NextResponse.json({
       success: true,

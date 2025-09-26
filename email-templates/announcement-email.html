@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GJS 20th Anniversary - Special Announcement</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            color: #ffffff;
+        }
+        
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            padding: 40px 30px;
+            text-align: center;
+        }
+        
+        .logo {
+            height: 60px;
+            width: auto;
+            margin: 0 auto 20px;
+            display: block;
+            filter: brightness(110%) contrast(110%);
+        }
+        
+        .header-title {
+            font-size: 28px;
+            font-weight: 300;
+            letter-spacing: 0.2em;
+            color: #ffffff;
+            margin: 0 0 10px 0;
+        }
+        
+        .header-subtitle {
+            font-size: 32px;
+            font-weight: 700;
+            margin: 0 0 10px 0;
+            color: #ffffff;
+        }
+        
+        .header-tagline {
+            font-size: 18px;
+            font-weight: 300;
+            letter-spacing: 0.1em;
+            color: #cccccc;
+            margin: 0;
+        }
+        
+        .content {
+            padding: 40px 30px;
+            background: transparent;
+        }
+        
+        .greeting {
+            font-size: 16px;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.9);
+            margin: 0 0 20px 0;
+            font-weight: 400;
+        }
+        
+        .main-content {
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            margin: 20px 0;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            backdrop-filter: blur(10px);
+        }
+        
+        .content-text {
+            font-size: 16px;
+            line-height: 1.7;
+            color: rgba(255, 255, 255, 0.95);
+            margin: 0 0 20px 0;
+            font-weight: 400;
+        }
+        
+        .milestone-highlight {
+            color: rgba(59, 130, 246, 1);
+            font-weight: 500;
+        }
+        
+        .rsvp-button {
+            display: inline-block;
+            background: rgba(59, 130, 246, 0.2);
+            color: #ffffff;
+            text-decoration: none;
+            padding: 16px 40px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 400;
+            text-align: center;
+            margin: 20px 0;
+            border: 1px solid rgba(59, 130, 246, 0.4);
+            letter-spacing: 0.1em;
+            transition: all 0.5s ease;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .rsvp-button:hover {
+            border-color: rgba(59, 130, 246, 0.6);
+            background: rgba(59, 130, 246, 0.3);
+            transform: scale(1.02);
+        }
+        
+        .rsvp-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .rsvp-button:hover::before {
+            left: 100%;
+        }
+        
+        .rsvp-section {
+            text-align: center;
+            margin: 30px 0;
+            padding: 30px;
+            background: rgba(59, 130, 246, 0.05);
+            border-radius: 20px;
+            border: 1px solid rgba(59, 130, 246, 0.15);
+            backdrop-filter: blur(10px);
+        }
+        
+        .rsvp-text {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #ffffff;
+            margin: 0 0 20px 0;
+            font-weight: 400;
+        }
+        
+        .signature-section {
+            margin: 30px 0 20px 0;
+            padding: 20px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .signature-text {
+            font-size: 16px;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.9);
+            margin: 0 0 20px 0;
+            font-weight: 400;
+        }
+        
+        .signature-names {
+            font-size: 18px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 1);
+            margin: 0;
+        }
+        
+        .footer {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .footer-text {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+            margin: 0 0 10px 0;
+            font-weight: 300;
+        }
+        
+        .footer-logo {
+            height: 40px;
+            width: auto;
+            margin: 10px auto;
+            display: block;
+            opacity: 0.7;
+            filter: brightness(110%) contrast(110%);
+        }
+        
+        @media (max-width: 600px) {
+            .email-container {
+                margin: 0;
+                box-shadow: none;
+            }
+            
+            .header, .content, .footer {
+                padding: 20px;
+            }
+            
+            .header-title {
+                font-size: 24px;
+            }
+            
+            .header-subtitle {
+                font-size: 28px;
+            }
+            
+            .announcement-box, .celebration-section, .gratitude-section {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <!-- Header -->
+        <div class="header">
+            <img src="https://gjsproperty.events/Primary_Dark-GJS@150pp.png" alt="GJS Property" class="logo">
+            <h1 class="header-title">A PERSONAL MESSAGE</h1>
+            <h2 class="header-subtitle">GJS</h2>
+            <h3 class="header-tagline">20 YEARS & COUNTING</h3>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="content">
+            <p class="greeting">Dear [Name],</p>
+            
+            <!-- Main Content Block -->
+            <div class="main-content">
+                <p class="content-text">
+                    As of the <span class="milestone-highlight">1st of July 2025</span>, we are delighted to share that, GJS is celebrating <span class="milestone-highlight">20 years in business</span>.
+                </p>
+                <p class="content-text">
+                    To mark this significant milestone, we are hosting a small gathering and would be honoured to have you join us. This celebration is an opportunity to thank the people who have been part of our journey, our valued clients, customers, industry colleagues, and friends.
+                </p>
+                <p class="content-text">
+                    Twenty years is a big achievement for any small business, and we're incredibly proud of what GJS has accomplished with your help along the way.
+                </p>
+                <p class="content-text">
+                    Please view the formal invitation, and RSVP via the button below:
+                </p>
+                <div style="text-align: center; margin-top: 30px;">
+                    <a href="https://gjsproperty.events/20-years?invite={FIRSTNAME}&firstName={FIRSTNAME}&lastName={SURNAME}" class="rsvp-button">
+                        View Invitation & RSVP
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Signature -->
+            <div class="signature-section">
+                <p class="signature-text">Yours Sincerely,</p>
+                <p class="signature-names">Gordon and Jason</p>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <img src="https://gjsproperty.events/Primary_Dark-GJS@150pp.png" alt="GJS Property" class="footer-logo">
+            <p class="footer-text">GJS Property - Celebrating 20 Years of Excellence</p>
+            <p class="footer-text">© 2025 GJS Property. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>

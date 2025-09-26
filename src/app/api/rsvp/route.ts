@@ -1,6 +1,8 @@
 import { Resend } from 'resend';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
+import { dbOperations } from '@/lib/database';
+import { sharePointService } from '@/lib/sharepoint';
 
 const resend = new Resend(process.env.RESEND_API_KEY || 're_placeholder');
 
@@ -14,13 +16,8 @@ const rsvpSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
-    // Check if Resend API key is configured
-    if (!process.env.RESEND_API_KEY || process.env.RESEND_API_KEY === 're_placeholder') {
-      return NextResponse.json(
-        { success: false, message: 'Email service not configured. Please set RESEND_API_KEY environment variable.' },
-        { status: 500 }
-      );
-    }
+    // Check if Resend API key is configured (optional)
+    const emailConfigured = process.env.RESEND_API_KEY && process.env.RESEND_API_KEY !== 're_placeholder';
 
     const body = await request.json();
     
@@ -63,8 +60,10 @@ export async function POST(request: NextRequest) {
     const outlookUrl = `ms-outlook://calendar/action/compose?subject=${encodeURIComponent(eventTitle)}&startdt=2025-10-30T05:00:00Z&enddt=2025-10-30T09:00:00Z&body=${encodeURIComponent(eventDescription)}&location=${encodeURIComponent(eventLocation)}`;
     const appleUrl = `webcal://p01-calendarws.icloud.com/published/2/MTUyMzQwOTI1ODQ1MTUyM3xGSlMgMjB0aCBZZWFyIENlbGVicmF0aW9ufEdKUyBQcm9wZXJ0eSBUZWFtIHdvdWxkIGxvdmUgeW91IHRvIGpvaW4gdXMgZm9yIG91ciAyMHRoIHllYXIgQ2VsZWJyYXRpb24gZm9yIGEgY2FuYXDDqSBhbmQgZHJpbmsgb3IgdHdvIOKApnwyMDI1LTEwLTMwVDA1OjAwOjAwWi8yMDI1LTEwLTMwVDA5OjAwOjAwWnxMZXZlbCAxMCwgU2hlbGwgSG91c2UsIDM3IE1hcmdhcmV0IFN0cmVldCwgU3lkbmV5IChWaWEgV3lueWFyZCBMYW5lKQ`;
 
-    // Email to RSVP person (confirmation)
-    const confirmationEmail = await resend.emails.send({
+    // Email to RSVP person (confirmation) - only if email is configured
+    let confirmationEmail: { data?: { id: string } } | null = null;
+    if (emailConfigured) {
+      confirmationEmail = await resend.emails.send({
       from: 'GJS Property Team <noreply@gjsproperty.events>',
       to: [email],
       subject: 'RSVP Confirmation - GJS 20th Year Celebration',
@@ -155,12 +154,52 @@ export async function POST(request: NextRequest) {
           </div>
         </div>
       `,
+      });
+    }
+
+    // Store RSVP in database
+    const rsvpResult = dbOperations.insertRSVP({
+      name: sanitizedName,
+      email: sanitizedEmail,
+      attendance,
+      dietary_requirements: sanitizedDietary || undefined,
+      confirmation_id: confirmationEmail?.data?.id || undefined,
     });
 
-    // Email to organizer (RSVP notification)
-    await resend.emails.send({
+    // Update invite status if this person was invited
+    dbOperations.updateInviteStatus(sanitizedEmail, 'responded', rsvpResult.lastInsertRowid as number);
+
+    // Sync to SharePoint if configured
+    if (sharePointService.isConfigured()) {
+      try {
+        const rsvpRecord = {
+          id: rsvpResult.lastInsertRowid as number,
+          name: sanitizedName,
+          email: sanitizedEmail,
+          attendance,
+          dietary_requirements: sanitizedDietary || null,
+          rsvp_date: new Date().toISOString(),
+          confirmation_id: confirmationEmail?.data?.id || null,
+          created_at: new Date().toISOString()
+        };
+        
+        await sharePointService.appendRSVPToExcel(rsvpRecord);
+        console.log('RSVP synced to SharePoint successfully');
+      } catch (error) {
+        console.error('Failed to sync RSVP to SharePoint:', error);
+        // Don't fail the RSVP if SharePoint sync fails
+      }
+    }
+
+    // Email to organizer (RSVP notification) - only if email is configured
+    if (emailConfigured) {
+      await resend.emails.send({
       from: 'GJS Property Team <noreply@gjsproperty.events>',
-      to: [process.env.ORGANIZER_EMAIL || 'organizer@gjsproperty.events'],
+      to: [
+        'admin@wynt.com.au',
+        'regan@gjsproperty.com.au',
+        'gordon@gjsproperty.com.au'
+      ],
       subject: `New RSVP - ${sanitizedName} - GJS 20th Year Celebration`,
       html: `
         <div style="font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif; max-width: 600px; margin: 0 auto; background: #f8f9fa; color: #333; padding: 40px;">
@@ -202,12 +241,14 @@ export async function POST(request: NextRequest) {
           </div>
         </div>
       `,
-    });
+      });
+    }
 
     return NextResponse.json({ 
       success: true, 
       message: 'RSVP submitted successfully',
-      confirmationId: confirmationEmail.data?.id 
+      confirmationId: confirmationEmail?.data?.id,
+      rsvpId: rsvpResult.lastInsertRowid
     });
 
   } catch (error) {

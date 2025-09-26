@@ -1,0 +1,5 @@
+id,name,email,attendance,dietary_requirements,rsvp_date,confirmation_id,created_at
+4,Kyle Stuart,kyle@wynt.com.au,no,Test,2025-09-25 07:58:19,,2025-09-25 07:58:19
+3,Jane Smith,jane@example.com,yes,Gluten-free,2025-09-25 06:46:55,,2025-09-25 06:46:55
+2,John Doe,john@example.com,yes,Vegetarian,2025-09-25 05:57:14,,2025-09-25 05:57:14
+1,Test User,test@example.com,yes,None,2025-09-25 05:53:23,,2025-09-25 05:53:23

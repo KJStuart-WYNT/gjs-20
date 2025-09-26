@@ -61,7 +61,7 @@ export async function POST(request: NextRequest) {
     const appleUrl = `webcal://p01-calendarws.icloud.com/published/2/MTUyMzQwOTI1ODQ1MTUyM3xGSlMgMjB0aCBZZWFyIENlbGVicmF0aW9ufEdKUyBQcm9wZXJ0eSBUZWFtIHdvdWxkIGxvdmUgeW91IHRvIGpvaW4gdXMgZm9yIG91ciAyMHRoIHllYXIgQ2VsZWJyYXRpb24gZm9yIGEgY2FuYXDDqSBhbmQgZHJpbmsgb3IgdHdvIOKApnwyMDI1LTEwLTMwVDA1OjAwOjAwWi8yMDI1LTEwLTMwVDA5OjAwOjAwWnxMZXZlbCAxMCwgU2hlbGwgSG91c2UsIDM3IE1hcmdhcmV0IFN0cmVldCwgU3lkbmV5IChWaWEgV3lueWFyZCBMYW5lKQ`;
 
     // Email to RSVP person (confirmation) - only if email is configured
-    let confirmationEmail: { data?: { id: string } } | null = null;
+    let confirmationEmail: any = null;
     if (emailConfigured) {
       confirmationEmail = await resend.emails.send({
       from: 'GJS Property Team <noreply@gjsproperty.events>',

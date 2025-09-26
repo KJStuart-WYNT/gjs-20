@@ -1,8 +1,9 @@
 import NextAuth from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import bcrypt from 'bcryptjs'
+import type { NextAuthOptions } from 'next-auth'
 
-export const authOptions = {
+export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       name: 'credentials',
@@ -53,7 +54,7 @@ export const authOptions = {
     })
   ],
   session: {
-    strategy: 'jwt' as const,
+    strategy: 'jwt',
     maxAge: 24 * 60 * 60, // 24 hours
   },
   jwt: {
@@ -61,16 +62,16 @@ export const authOptions = {
     maxAge: 24 * 60 * 60, // 24 hours
   },
   callbacks: {
-    async jwt({ token, user }: { token: Record<string, unknown>; user: Record<string, unknown> }) {
+    async jwt({ token, user }) {
       if (user) {
-        token.role = user.role
+        token.role = (user as any).role
       }
       return token
     },
-    async session({ session, token }: { session: Record<string, unknown>; token: Record<string, unknown> }) {
+    async session({ session, token }) {
       if (token && session.user) {
-        (session.user as Record<string, unknown>).id = token.sub as string
-        (session.user as Record<string, unknown>).role = token.role as string
+        (session.user as any).id = token.sub
+        (session.user as any).role = token.role
       }
       return session
     }

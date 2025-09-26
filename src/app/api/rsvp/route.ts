@@ -2,7 +2,6 @@ import { Resend } from 'resend';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { dbOperations } from '@/lib/database';
-import { sharePointService } from '@/lib/sharepoint';
 
 const resend = new Resend(process.env.RESEND_API_KEY || 're_placeholder');
 
@@ -170,27 +169,6 @@ export async function POST(request: NextRequest) {
     // Update invite status if this person was invited
     dbOperations.updateInviteStatus(sanitizedEmail, 'responded', rsvpResult.lastInsertRowid as number);
 
-    // Sync to SharePoint if configured
-    if (sharePointService.isConfigured()) {
-      try {
-        const rsvpRecord = {
-          id: rsvpResult.lastInsertRowid as number,
-          name: sanitizedName,
-          email: sanitizedEmail,
-          attendance,
-          dietary_requirements: sanitizedDietary || null,
-          rsvp_date: new Date().toISOString(),
-          confirmation_id: confirmationEmail?.data?.id || null,
-          created_at: new Date().toISOString()
-        };
-        
-        await sharePointService.appendRSVPToExcel(rsvpRecord);
-        console.log('RSVP synced to SharePoint successfully');
-      } catch (error) {
-        console.error('Failed to sync RSVP to SharePoint:', error);
-        // Don't fail the RSVP if SharePoint sync fails
-      }
-    }
 
     // Email to organizer (RSVP notification) - only if email is configured
     if (emailConfigured) {

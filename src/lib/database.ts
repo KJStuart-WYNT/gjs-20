@@ -1,4 +1,6 @@
-import { sql } from '@vercel/postgres';
+import { Pool } from '@neondatabase/serverless';
+
+let pool: Pool | null = null;
 
 export interface RSVPRecord {
   id: number;
@@ -22,10 +24,20 @@ export interface InviteRecord {
   created_at: string;
 }
 
+function getPool(): Pool {
+  if (!pool) {
+    pool = new Pool({ 
+      connectionString: process.env.POSTGRES_URL || process.env.DATABASE_URL 
+    });
+  }
+  return pool;
+}
+
 // Initialize tables
 export async function initTables() {
   try {
-    await sql`
+    const client = getPool();
+    await client.query(`
       CREATE TABLE IF NOT EXISTS rsvps (
         id SERIAL PRIMARY KEY,
         name TEXT NOT NULL,
@@ -36,9 +48,9 @@ export async function initTables() {
         confirmation_id TEXT,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
-    `;
+    `);
 
-    await sql`
+    await client.query(`
       CREATE TABLE IF NOT EXISTS invites (
         id SERIAL PRIMARY KEY,
         name TEXT NOT NULL,
@@ -50,11 +62,11 @@ export async function initTables() {
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (rsvp_id) REFERENCES rsvps (id)
       )
-    `;
+    `);
 
-    await sql`CREATE INDEX IF NOT EXISTS idx_rsvps_email ON rsvps(email)`;
-    await sql`CREATE INDEX IF NOT EXISTS idx_invites_email ON invites(email)`;
-    await sql`CREATE INDEX IF NOT EXISTS idx_rsvps_date ON rsvps(rsvp_date)`;
+    await client.query(`CREATE INDEX IF NOT EXISTS idx_rsvps_email ON rsvps(email)`);
+    await client.query(`CREATE INDEX IF NOT EXISTS idx_invites_email ON invites(email)`);
+    await client.query(`CREATE INDEX IF NOT EXISTS idx_rsvps_date ON rsvps(rsvp_date)`);
   } catch (error) {
     console.error('Error initializing tables:', error);
   }
@@ -75,11 +87,12 @@ export const dbOperations = {
     confirmation_id?: string;
   }) => {
     try {
-      const result = await sql`
+      const client = getPool();
+      const result = await client.query(`
         INSERT INTO rsvps (name, email, attendance, dietary_requirements, confirmation_id)
-        VALUES (${data.name}, ${data.email}, ${data.attendance}, ${data.dietary_requirements || null}, ${data.confirmation_id || null})
-        RETURNING id, name, email, attendance, dietary_requirements, rsvp_date, confirmation_id, created_at
-      `;
+        VALUES ($1, $2, $3, $4, $5)
+        RETURNING id
+      `, [data.name, data.email, data.attendance, data.dietary_requirements || null, data.confirmation_id || null]);
       return { lastInsertRowid: result.rows[0].id };
     } catch (error) {
       console.error('Database insert error:', error);
@@ -89,10 +102,11 @@ export const dbOperations = {
 
   getAllRSVPs: async (): Promise<RSVPRecord[]> => {
     try {
-      const result = await sql<RSVPRecord>`
+      const client = getPool();
+      const result = await client.query(`
         SELECT * FROM rsvps ORDER BY created_at DESC
-      `;
-      return result.rows;
+      `);
+      return result.rows as RSVPRecord[];
     } catch (error) {
       console.error('Database query error:', error);
       return [];
@@ -101,9 +115,10 @@ export const dbOperations = {
 
   getRSVPByEmail: async (email: string): Promise<RSVPRecord | null> => {
     try {
-      const result = await sql<RSVPRecord>`
-        SELECT * FROM rsvps WHERE email = ${email} ORDER BY created_at DESC LIMIT 1
-      `;
+      const client = getPool();
+      const result = await client.query(`
+        SELECT * FROM rsvps WHERE email = $1 ORDER BY created_at DESC LIMIT 1
+      `, [email]);
       return result.rows[0] || null;
     } catch (error) {
       console.error('Database query error:', error);
@@ -118,11 +133,12 @@ export const dbOperations = {
     invite_url?: string;
   }) => {
     try {
-      const result = await sql`
+      const client = getPool();
+      const result = await client.query(`
         INSERT INTO invites (name, email, invite_url)
-        VALUES (${data.name}, ${data.email}, ${data.invite_url || null})
+        VALUES ($1, $2, $3)
         RETURNING id
-      `;
+      `, [data.name, data.email, data.invite_url || null]);
       return { lastInsertRowid: result.rows[0].id };
     } catch (error) {
       console.error('Database insert error:', error);
@@ -132,11 +148,12 @@ export const dbOperations = {
 
   updateInviteStatus: async (email: string, status: 'sent' | 'responded' | 'declined', rsvp_id?: number) => {
     try {
-      await sql`
+      const client = getPool();
+      await client.query(`
         UPDATE invites 
-        SET status = ${status}, rsvp_id = ${rsvp_id || null}, invite_sent_date = CURRENT_TIMESTAMP
-        WHERE email = ${email} AND status != 'responded'
-      `;
+        SET status = $1, rsvp_id = $2, invite_sent_date = CURRENT_TIMESTAMP
+        WHERE email = $3 AND status != 'responded'
+      `, [status, rsvp_id || null, email]);
     } catch (error) {
       console.error('Database update error:', error);
       throw error;
@@ -145,10 +162,11 @@ export const dbOperations = {
 
   getAllInvites: async (): Promise<InviteRecord[]> => {
     try {
-      const result = await sql<InviteRecord>`
+      const client = getPool();
+      const result = await client.query(`
         SELECT * FROM invites ORDER BY created_at DESC
-      `;
-      return result.rows;
+      `);
+      return result.rows as InviteRecord[];
     } catch (error) {
       console.error('Database query error:', error);
       return [];
@@ -157,13 +175,14 @@ export const dbOperations = {
 
   getInviteStats: async () => {
     try {
-      const result = await sql`
+      const client = getPool();
+      const result = await client.query(`
         SELECT 
           status,
           COUNT(*) as count
         FROM invites 
         GROUP BY status
-      `;
+      `);
       return result.rows as Array<{ status: string; count: number }>;
     } catch (error) {
       console.error('Database query error:', error);
@@ -173,13 +192,14 @@ export const dbOperations = {
 
   getRSVPStats: async () => {
     try {
-      const result = await sql`
+      const client = getPool();
+      const result = await client.query(`
         SELECT 
           attendance,
           COUNT(*) as count
         FROM rsvps 
         GROUP BY attendance
-      `;
+      `);
       return result.rows as Array<{ attendance: string; count: number }>;
     } catch (error) {
       console.error('Database query error:', error);
